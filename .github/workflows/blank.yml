@@ -1,0 +1,29 @@
+name: Build and Test Static Site
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Check if index.html exists
+        run: |
+          if [ ! -f index.html ]; then
+            echo "index.html not found!"
+            exit 1
+          fi
+          echo "index.html exists."
+
+      - name: Install HTML validator
+        run: sudo apt-get install -y tidy
+
+      - name: Validate HTML
+        run: tidy -e index.html
